@@ -1,0 +1,95 @@
+# ==========================================
+# 1. Go to the project folder
+# ==========================================
+
+cd ~/Downloads/video-converter-online
+
+mkdir -p frame-interpolation
+cd frame-interpolation
+
+
+# ==========================================
+# 2. Download RIFE (ONLY NEEDED ONCE)
+# ==========================================
+
+wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/20221029/rife-ncnn-vulkan-20221029-ubuntu.zip
+
+
+# ==========================================
+# 3. Extract RIFE (ONLY NEEDED ONCE)
+# ==========================================
+
+unzip rife-ncnn-vulkan-20221029-ubuntu.zip
+
+
+# ==========================================
+# 4. Choose the video you want to convert
+# ==========================================
+
+VIDEO="/home/joyal/Downloads/Telegram Desktop/trial.mp4"
+
+
+# ==========================================
+# 5. Create fresh frame folders
+# ==========================================
+
+rm -rf test-frames output-frames
+mkdir -p test-frames output-frames
+
+
+# ==========================================
+# 6. Extract the video's frames
+# ==========================================
+
+ffmpeg -i "$VIDEO" \
+-fps_mode passthrough \
+test-frames/%08d.png
+
+
+# ==========================================
+# 7. Run RIFE AI
+#    30 FPS → 60 FPS
+# ==========================================
+
+cd rife-ncnn-vulkan-20221029-ubuntu
+
+./rife-ncnn-vulkan \
+-i ../test-frames \
+-o ../output-frames \
+-g 0 \
+-m rife-v4.6
+
+
+# ==========================================
+# 8. Check the generated frames
+# ==========================================
+
+ls ../output-frames | wc -l
+
+
+# ==========================================
+# 9. Create the final 60 FPS video
+# ==========================================
+
+ffmpeg -framerate 60 \
+-i ../output-frames/%08d.png \
+-i "$VIDEO" \
+-map 0:v:0 -map 1:a? \
+-c:v libx264 \
+-preset medium \
+-crf 18 \
+-pix_fmt yuv420p \
+-c:a aac \
+-shortest \
+"../trial-60fps.mp4"
+
+
+# ==========================================
+# 10. Check that the final video is 60 FPS
+# ==========================================
+
+ffprobe -v error \
+-select_streams v:0 \
+-show_entries stream=r_frame_rate \
+-of default=noprint_wrappers=1 \
+"../trial-60fps.mp4"

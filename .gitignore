@@ -1,0 +1,93 @@
+# =========================
+# Python
+# =========================
+
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+
+# =========================
+# Django
+# =========================
+
+db.sqlite3
+db.sqlite3-journal
+*.log
+
+# Uploaded / converted videos
+media/
+backend/media/
+backend/processing/
+
+# =========================
+# Environment / secrets
+# =========================
+
+.env
+.env.*
+
+
+# =========================
+# React / Node
+# =========================
+
+node_modules/
+dist/
+
+
+# =========================
+# IDE
+# =========================
+
+.vscode/
+.idea/
+
+
+# =========================
+# OS
+# =========================
+
+.DS_Store
+Thumbs.db
+
+
+# =========================
+# Python testing / cache
+# =========================
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+# =========================
+# RIFE / large model files
+# =========================
+
+# Ignore downloaded RIFE model weights
+frame-interpolation/models/
+
+# Ignore training logs
+frame-interpolation/train_log/
+
+# =========================
+# RIFE / large model files
+# =========================
+
+# Ignore downloaded RIFE model weights
+frame-interpolation/models/
+
+# Ignore training logs
+frame-interpolation/train_log/
+
+# Frame interpolation generated files
+frame-interpolation/processing/
+
+# RIFE downloaded binary and model files
+frame-interpolation/rife-ncnn-vulkan-20221029-ubuntu/
