@@ -206,7 +206,8 @@ class IncreaseFPSView(generics.UpdateAPIView):
 
         try:
             output_path = increase_fps_video(
-                video.original_file
+                video.original_file,
+                video.pk,
             )
 
         except Exception as error:

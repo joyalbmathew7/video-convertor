@@ -1,8 +1,5 @@
 import { useState } from "react";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  `http://${window.location.hostname}:8000/api/v1`;
+import { API_BASE_URL, authenticatedFetch } from "../api";
 
 function VideoConverter() {
   // -----------------------------
@@ -214,7 +211,7 @@ function VideoConverter() {
       fpsVideo
     );
 
-    const uploadResponse = await fetch(
+    const uploadResponse = await authenticatedFetch(
       `${API_BASE_URL}/videos/upload/`,
       {
         method: "POST",
@@ -249,7 +246,7 @@ function VideoConverter() {
     const conversionStartTime =
       performance.now();
 
-    const response = await fetch(
+    const response = await authenticatedFetch(
       `${API_BASE_URL}/videos/${videoId}/increase-fps/`,
       {
         method: "PATCH",
@@ -311,7 +308,7 @@ function VideoConverter() {
     }
 
     try {
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `${API_BASE_URL}/videos/${fpsVideoId}/download/`,
         {
           headers: {

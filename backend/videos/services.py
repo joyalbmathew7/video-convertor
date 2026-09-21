@@ -1,6 +1,7 @@
 import subprocess
 import sys
 from pathlib import Path
+from uuid import uuid4
 
 from django.conf import settings
 
@@ -58,7 +59,7 @@ def convert_video(input_file, output_format, resolution):
     )
 
     output_filename = (
-        f"{input_path.stem}_{resolution}.{output_format}"
+        f"{input_path.stem}_{uuid4().hex}_{resolution}.{output_format}"
     )
 
     output_path = output_directory / output_filename
@@ -82,7 +83,7 @@ def convert_video(input_file, output_format, resolution):
     return output_path
 
 
-def increase_fps_video(input_file):
+def increase_fps_video(input_file, job_id):
     input_path = Path(input_file.path)
 
     output_directory = (
@@ -97,7 +98,7 @@ def increase_fps_video(input_file):
     )
 
     output_filename = (
-        f"{input_path.stem}_60fps.mp4"
+        f"{input_path.stem}_{job_id}_60fps.mp4"
     )
 
     output_path = output_directory / output_filename
@@ -114,6 +115,7 @@ def increase_fps_video(input_file):
             str(rife_script),
             str(input_path),
             str(output_path),
+            str(job_id),
         ],
         check=True,
     )

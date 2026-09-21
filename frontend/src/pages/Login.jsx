@@ -1,8 +1,5 @@
 import { useState } from "react";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  `http://${window.location.hostname}:8000/api/v1`;
+import { API_BASE_URL } from "../api";
 
 function Login({
   onRegisterClick,
