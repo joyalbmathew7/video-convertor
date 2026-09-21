@@ -1,24 +1,22 @@
-Video Converter
-A web-based video converter built with Django, Django REST Framework, React, Vite, and FFmpeg.
+first
+in frontend
 
-Features
-Video format conversion
-Video resolution conversion
-FPS conversion
-User authentication
-Upload and download
-Automatic cleanup of old videos
-Tech Stack
-Backend
-Django
-Django REST Framework
-JWT Authentication
-FFmpeg
-Frontend
-React
-Vite
-Project Structure
-video-converter-online/
-├── backend/
-├── frontend/
-└── frame-interpolation/
+install npm install
+npm run dev
+in backend
+
+python3 -m venv venv
+activate venv according you your
+pip install -r requirements.txt
+
+make sure  you installed python 3.14.4
+download this inside the frame-interpolation folder
+
+wget https://github.com/nihui/rife-ncnn-vulkan/releases/download/20221029/rife-ncnn-vulkan-20221029-ubuntu.zip
+and extract it
+
+python manage.py runserver
+
+
+
+

@@ -1,7 +1,24 @@
 import { useState } from "react";
 import { API_BASE_URL, authenticatedFetch } from "../api";
 
-function VideoConverter() {
+const MAX_GUEST_FILE_SIZE = 100 * 1024 * 1024;
+const MAX_AUTHENTICATED_FILE_SIZE = 1 * 1024 * 1024 * 1024;
+
+function VideoConverter({ isLoggedIn }) {
+  const maxFileSize = isLoggedIn
+    ? MAX_AUTHENTICATED_FILE_SIZE
+    : MAX_GUEST_FILE_SIZE;
+  const maxFileSizeLabel = isLoggedIn ? "1 GB" : "100 MB";
+
+  const getFileSizeError = () => (
+    isLoggedIn
+      ? "Maximum video size for logged-in users is 1 GB."
+      : "Maximum video size for guests is 100 MB."
+  );
+
+  const isFileTooLarge = (file) => (
+    file && file.size > maxFileSize
+  );
   // -----------------------------
   // Resolution converter state
   // -----------------------------
@@ -43,6 +60,11 @@ function VideoConverter() {
       return;
     }
 
+    if (isFileTooLarge(video)) {
+      setError(getFileSizeError());
+      return;
+    }
+
     setLoading(true);
     setStatus("Uploading... 0%");
     setError("");
@@ -65,6 +87,14 @@ function VideoConverter() {
       "POST",
       `${API_BASE_URL}/videos/public/convert/`
     );
+
+    const accessToken = localStorage.getItem("access_token");
+    if (isLoggedIn && accessToken) {
+      xhr.setRequestHeader(
+        "Authorization",
+        `Bearer ${accessToken}`
+      );
+    }
 
     xhr.upload.addEventListener("progress", (event) => {
       if (event.lengthComputable) {
@@ -360,12 +390,24 @@ function VideoConverter() {
           No login required.
         </p>
 
+        <p>
+          Maximum file size: {maxFileSizeLabel}
+        </p>
+
         <input
           type="file"
           accept="video/*"
           disabled={loading}
           onChange={(e) => {
-            setVideo(e.target.files[0]);
+            const selectedFile = e.target.files[0];
+            if (isFileTooLarge(selectedFile)) {
+              setVideo(null);
+              setError(getFileSizeError());
+              e.target.value = "";
+              return;
+            }
+
+            setVideo(selectedFile);
             setDownloadUrl("");
             setError("");
             setStatus("");
@@ -492,12 +534,29 @@ function VideoConverter() {
           Login required.
         </p>
 
+        <p>
+          Maximum file size: 1 GB
+        </p>
+
         <input
           type="file"
           accept="video/*"
           disabled={fpsLoading}
           onChange={(e) => {
-            setFpsVideo(e.target.files[0]);
+            const selectedFile = e.target.files[0];
+            if (
+              selectedFile &&
+              selectedFile.size > MAX_AUTHENTICATED_FILE_SIZE
+            ) {
+              setFpsVideo(null);
+              setFpsError(
+                "Maximum video size for logged-in users is 1 GB."
+              );
+              e.target.value = "";
+              return;
+            }
+
+            setFpsVideo(selectedFile);
             setFpsVideoId(null);
             setFpsError("");
             setFpsStatus("");

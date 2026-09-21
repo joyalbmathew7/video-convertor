@@ -439,14 +439,18 @@ Delete converted
 Delete database record
 ```
 
-Your intended retention:
+The retention period is:
 
 ```text
-Guest       → 1 hour
-Logged user → 24 hours
+All uploads → 24 hours
 ```
 
-And you're planning to use **cron** to automatically run the cleanup command.
+Run the cleanup command every 10 minutes with **cron** so files are removed shortly after
+their 24-hour retention period:
+
+```cron
+*/10 * * * * cd /home/joyal/Downloads/video-converter-online/backend && /home/joyal/Downloads/video-converter-online/backend/venv/bin/python manage.py cleanup_videos >> /tmp/video-converter-cleanup.log 2>&1
+```
 
 ---
 

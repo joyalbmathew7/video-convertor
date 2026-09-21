@@ -74,7 +74,7 @@ function Home({ isLoggedIn, onLogout, onLogin, onDeleteAccount }) {
       <br />
       <br />
 
-      <VideoConverter />
+      <VideoConverter isLoggedIn={isLoggedIn} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-MAX_ANONYMOUS_FILE_SIZE = 1 * 1024 * 1024 * 1024
-MAX_AUTHENTICATED_FILE_SIZE = 2 * 1024 * 1024 * 1024
+MAX_ANONYMOUS_FILE_SIZE = 100 * 1024 * 1024
+MAX_AUTHENTICATED_FILE_SIZE = 1 * 1024 * 1024 * 1024
 
 ANONYMOUS_TOTAL_LIMIT = 1 * 1024 * 1024 * 1024
 AUTHENTICATED_TOTAL_LIMIT = 10 * 1024 * 1024 * 1024
@@ -7,8 +7,15 @@ AUTHENTICATED_TOTAL_LIMIT = 10 * 1024 * 1024 * 1024
 
 def check_file_size(file, max_size):
     if file.size > max_size:
+        if max_size == MAX_ANONYMOUS_FILE_SIZE:
+            message = "Maximum video size for guests is 100 MB."
+        else:
+            message = (
+                "Maximum video size for logged-in users is 1 GB."
+            )
+
         raise ValueError(
-            "This video is larger than the allowed file size."
+            message
         )
 
 

@@ -6,6 +6,9 @@ from django.utils import timezone
 from videos.models import VideoConversion
 
 
+RETENTION_PERIOD = timedelta(hours=24)
+
+
 class Command(BaseCommand):
     help = "Delete expired video files and database records."
 
@@ -17,10 +20,7 @@ class Command(BaseCommand):
         deleted_count = 0
 
         for video in conversions:
-            if video.user is None:
-                expiry_time = video.created_at + timedelta(hours=1)
-            else:
-                expiry_time = video.created_at + timedelta(hours=24)
+            expiry_time = video.created_at + RETENTION_PERIOD
 
             if now >= expiry_time:
                 if video.original_file:
